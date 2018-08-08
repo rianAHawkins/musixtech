@@ -1,0 +1,33 @@
+{
+  "name": "struck",
+  "version": "1.0.1",
+  "description": "packing for the first time",
+  "main": "0",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "connect-busboy": "^0.0.2",
+    "express": "^4.13.4",
+    "mocha": "^2.5.3",
+    "mongodb": "^2.1.7",
+    "mongoose": "^4.4.6",
+    "npm": "^3.7.3",
+    "package": "^1.0.1",
+    "seriate": "^0.7.2",
+    "should": "^7.1.0",
+    "supertest": "^1.2.0",
+    "tedious-connection-pool": "^1.0.4"
+  },
+  "scripts": {
+    "test": "x=0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git init"
+  },
+  "keywords": [
+    "word"
+  ],
+  "author": "rian a hawkins",
+  "license": "ISC",
+  "devDependencies": {}
+}
