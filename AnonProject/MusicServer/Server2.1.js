@@ -59,7 +59,44 @@ const options = {
 // basic route
 app.get('/', function(req, res)
 {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
+    res.sendFile(__dirname+'/pages/MusixTech.html');
+});
+
+app.get('/g',function(req, res)
+{
+  res.sendFile(__dirname+'/res/gaming.jpg');
+});
+app.get('/s',function(req, res)
+{
+  res.sendFile(__dirname+'/res/software.jpg');
+});
+app.get('/p',function(req, res)
+{
+  res.sendFile(__dirname+'/res/port.jpg');
+});
+app.get('/a',function(req, res)
+{
+  res.sendFile(__dirname+'/res/about.jpg');
+});
+
+app.get('/game',function(req, res)
+{
+  res.send("This is all the games I made (if I had any)");
+});
+
+app.get('/software',function(req, res)
+{
+  res.send(__dirname+'/pages/software.html');
+});
+
+app.get('/portfolio',function(req, res)
+{
+  res.send("This is the portfolio page");
+});
+
+app.get('/about',function(req, res)
+{
+  res.send("This is the about us page");
 });
 
 //signup page for browser
@@ -119,7 +156,7 @@ app.post('/psignup', function(req,res)
 
 apps.get('/', function(req, res)
 {
-    res.sendFile(__dirname+'/pages/index.html')
+    res.sendFile("Welcome to the api");
     //res.send('Hello! The API is at https://localhost:' + httpsPort + '/api');
 });
 
