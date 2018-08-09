@@ -86,7 +86,7 @@ app.get('/game',function(req, res)
 
 app.get('/software',function(req, res)
 {
-  res.send(__dirname+'/pages/software.html');
+  res.sendFile(__dirname+'/pages/software.html');
 });
 
 app.get('/portfolio',function(req, res)
