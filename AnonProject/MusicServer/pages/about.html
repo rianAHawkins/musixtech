@@ -92,7 +92,8 @@
 
   #gcap
   {
-
+    font-family: Garamond;
+    font-size: 20px;
   }
 </style>
 
@@ -102,41 +103,23 @@
   <p id='back' class='Shead' onclick="myFunction()">Back</p>
   </div>
   <div id='divs'>
-    <p id="head">Software services</p>
-    <form id='Form' action="" method="post">
-      Name/Company <br> <input class='con' type="text" name="name"><br>
-      Number<br> <input class='con' type="text" name="number"><br>
-      Email<br> <input class='con' type="text" name="email"><br>
-      Details of project<br> <textarea class='det' type="text" name="details"></textarea><br>
-      <div id='gcap' class="g-recaptcha" data-sitekey="6LfZO2kUAAAAAAl5TaVsrRMvtXpXD-gFmkWU4Eb5"></div></br>
-      <input onclick="sub()" class='button' value="submit">
-    </form>
+    <p id="head">About</p>
+    <p id='gcap'>
+    We are a small team of devs looking to do great things.</br>
+    Our team has diverse people with a lot of experince </br>
+    with web, mobile apps, and game development.</br>
+    We created this bussiness to help people with their dreams.</br>
+    Feel to email us at musixtechapi@gmail.com
+    </p>
+    <input onclick="myFunction()" class='button' value="Home">
   </div>
 
   <script>
 
-  function sub()
-  {
-    //need to validate the captcha
-    var response = grecaptcha.getResponse();
-
-    if(response.length == 0)
-    {
-        //reCaptcha not verified
-        alert('please fill out captcha');
-        //document.getElementById("Form").submit();
-    }
-    else
-    {
-        //reCaptch verified
-        document.getElementById("Form").submit();
-    }
-  }
-
   function myFunction()
   {
     var loc=window.location.href;
-    var i =loc.indexOf('software');
+    var i =loc.indexOf('about');
     loc=loc.substring(0,i);
     redirect(loc);
   }

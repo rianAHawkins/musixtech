@@ -102,41 +102,18 @@
   <p id='back' class='Shead' onclick="myFunction()">Back</p>
   </div>
   <div id='divs'>
-    <p id="head">Software services</p>
-    <form id='Form' action="" method="post">
-      Name/Company <br> <input class='con' type="text" name="name"><br>
-      Number<br> <input class='con' type="text" name="number"><br>
-      Email<br> <input class='con' type="text" name="email"><br>
-      Details of project<br> <textarea class='det' type="text" name="details"></textarea><br>
-      <div id='gcap' class="g-recaptcha" data-sitekey="6LfZO2kUAAAAAAl5TaVsrRMvtXpXD-gFmkWU4Eb5"></div></br>
-      <input onclick="sub()" class='button' value="submit">
-    </form>
+    <p id="head">Apps and Games</p>
+    <p>Sorry we have not posted any of our apps or games</p>
+    <p>Please visit this page later to see what we create<p>
+    <input onclick="myFunction()" class='button' value="Home">
   </div>
 
   <script>
 
-  function sub()
-  {
-    //need to validate the captcha
-    var response = grecaptcha.getResponse();
-
-    if(response.length == 0)
-    {
-        //reCaptcha not verified
-        alert('please fill out captcha');
-        //document.getElementById("Form").submit();
-    }
-    else
-    {
-        //reCaptch verified
-        document.getElementById("Form").submit();
-    }
-  }
-
   function myFunction()
   {
     var loc=window.location.href;
-    var i =loc.indexOf('software');
+    var i =loc.indexOf('game');
     loc=loc.substring(0,i);
     redirect(loc);
   }

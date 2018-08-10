@@ -17,7 +17,9 @@
     "seriate": "^0.7.2",
     "should": "^7.1.0",
     "supertest": "^1.2.0",
-    "tedious-connection-pool": "^1.0.4"
+    "tedious-connection-pool": "^1.0.4",
+    "nodemailer": "^4.6.7",
+    "is-mobile": "^1.0.0"
   },
   "scripts": {
     "test": "x=0"

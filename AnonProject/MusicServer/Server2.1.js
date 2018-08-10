@@ -15,6 +15,8 @@ var fileSystem  = require('fs');
 var path        = require('path');
 var util        = require('util');
 var fs          = require('fs');
+var nodemailer  = require('nodemailer');
+var mobile      = require('is-mobile');
 
 // =======================
 // === configuration =====
@@ -59,7 +61,15 @@ const options = {
 // basic route
 app.get('/', function(req, res)
 {
-    res.sendFile(__dirname+'/pages/MusixTech.html');
+    var ismobile = mobile(req);
+    if(ismobile)
+    {
+      res.sendFile(__dirname+'/pages/mMusixTech.html');
+    }
+    else
+    {
+      res.sendFile(__dirname+'/pages/MusixTech.html');
+    }
 });
 
 app.get('/g',function(req, res)
@@ -81,7 +91,7 @@ app.get('/a',function(req, res)
 
 app.get('/game',function(req, res)
 {
-  res.send("This is all the games I made (if I had any)");
+  res.sendFile(__dirname+'/pages/apps.html');
 });
 
 app.get('/software',function(req, res)
@@ -89,14 +99,45 @@ app.get('/software',function(req, res)
   res.sendFile(__dirname+'/pages/software.html');
 });
 
+app.post('/software',function(req,res)
+{
+    var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'generalappmail@gmail.com',
+      pass: 'Whiteandrewrian15'
+    }
+  });
+
+  var mailOptions = {
+    from: 'generalappmail@gmail.com',
+    to: 'rianandrewwhite@gmail.com',
+    subject: 'Project Lead',
+    text: 'Name: '+ req.body.name+'\n'+
+          'Number: '+ req.body.number+'\n'+
+          'Email: '+ req.body.email+'\n'+
+          'Details:\n'+ req.body.details
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  res.sendFile(__dirname+'/pages/STY.html');
+});
+
 app.get('/portfolio',function(req, res)
 {
-  res.send("This is the portfolio page");
+  res.sendFile(__dirname+'/pages/port.html');
 });
 
 app.get('/about',function(req, res)
 {
-  res.send("This is the about us page");
+  res.sendFile(__dirname+'/pages/about.html');
 });
 
 //signup page for browser

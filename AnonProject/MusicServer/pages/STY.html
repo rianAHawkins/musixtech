@@ -99,38 +99,21 @@
 <body id="body">
 
   <div id='bar'>
-  <p id='back' class='Shead' onclick="myFunction()">Back</p>
+  <p id='back' class='Shead' onclick="back()">Back</p>
   </div>
   <div id='divs'>
-    <p id="head">Software services</p>
-    <form id='Form' action="" method="post">
-      Name/Company <br> <input class='con' type="text" name="name"><br>
-      Number<br> <input class='con' type="text" name="number"><br>
-      Email<br> <input class='con' type="text" name="email"><br>
-      Details of project<br> <textarea class='det' type="text" name="details"></textarea><br>
-      <div id='gcap' class="g-recaptcha" data-sitekey="6LfZO2kUAAAAAAl5TaVsrRMvtXpXD-gFmkWU4Eb5"></div></br>
-      <input onclick="sub()" class='button' value="submit">
-    </form>
+    <p id="head">Thank you</p>
+    <p>We will get back to you as soon as possible</p>
+    <p>Please check out our other works and projects available from our home page<p>
+    <input onclick="myFunction()" class='button' value="Home">
   </div>
 
   <script>
 
-  function sub()
+  function back()
   {
-    //need to validate the captcha
-    var response = grecaptcha.getResponse();
-
-    if(response.length == 0)
-    {
-        //reCaptcha not verified
-        alert('please fill out captcha');
-        //document.getElementById("Form").submit();
-    }
-    else
-    {
-        //reCaptch verified
-        document.getElementById("Form").submit();
-    }
+    var loc=window.location.href;
+    redirect(loc);
   }
 
   function myFunction()
