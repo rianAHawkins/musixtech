@@ -24,7 +24,7 @@ var mobile      = require('is-mobile');
 
 var songs = {},songsN={},
 count = 0,sont=0;
-var httpsPort = 81;
+var httpsPort = 83;
 var port = 82; // used to create, sign, and verify tokens
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
@@ -93,12 +93,33 @@ app.get('/a',function(req, res)
 
 app.get('/game',function(req, res)
 {
-  res.sendFile(__dirname+'/pages/apps.html');
+  var ismobile = mobile(req);
+  if(ismobile)
+  {
+    console.log("mobile");
+    res.sendFile(__dirname+'/pages/mapps.html');
+  }
+  else
+  {
+    console.log("desktop");
+    res.sendFile(__dirname+'/pages/apps.html');
+  }
+
 });
 
 app.get('/software',function(req, res)
 {
-  res.sendFile(__dirname+'/pages/software.html');
+  var ismobile = mobile(req);
+  if(ismobile)
+  {
+    console.log("mobile");
+    res.sendFile(__dirname+'/pages/msoftware.html');
+  }
+  else
+  {
+    console.log("desktop");
+    res.sendFile(__dirname+'/pages/software.html');
+  }
 });
 
 app.post('/software',function(req,res)
@@ -134,12 +155,32 @@ app.post('/software',function(req,res)
 
 app.get('/portfolio',function(req, res)
 {
-  res.sendFile(__dirname+'/pages/port.html');
+  var ismobile = mobile(req);
+  if(ismobile)
+  {
+    console.log("mobile");
+    res.sendFile(__dirname+'/pages/mport.html');
+  }
+  else
+  {
+    console.log("desktop");
+    res.sendFile(__dirname+'/pages/port.html');
+  }
 });
 
 app.get('/about',function(req, res)
 {
-  res.sendFile(__dirname+'/pages/about.html');
+  var ismobile = mobile(req);
+  if(ismobile)
+  {
+    console.log("mobile");
+    res.sendFile(__dirname+'/pages/mabout.html');
+  }
+  else
+  {
+    console.log("desktop");
+    res.sendFile(__dirname+'/pages/about.html');
+  }
 });
 
 //signup page for browser
