@@ -25,7 +25,7 @@ var mobile      = require('is-mobile');
 var songs = {},songsN={},
 count = 0,sont=0;
 var httpsPort = 81;
-var port = 80; // used to create, sign, and verify tokens
+var port = 82; // used to create, sign, and verify tokens
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
 apps.set('superSecret', config.secret); // secret variable
