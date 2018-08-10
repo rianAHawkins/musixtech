@@ -24,8 +24,8 @@ var mobile      = require('is-mobile');
 
 var songs = {},songsN={},
 count = 0,sont=0;
-var httpsPort = 8081;
-var port = 8080; // used to create, sign, and verify tokens
+var httpsPort = 81;
+var port = 80; // used to create, sign, and verify tokens
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
 apps.set('superSecret', config.secret); // secret variable
@@ -50,8 +50,8 @@ var Uurl = 'mongodb://127.0.0.1:27017/users';
 
 
 const options = {
-  key: fs.readFileSync('../AnonProject/internal/pem/server-private-key.pem'),
-  cert: fs.readFileSync('../AnonProject/internal/pem/server-certificate.pem')
+  key: fs.readFileSync('../internal/pem/server-private-key.pem'),
+  cert: fs.readFileSync('../internal/pem/server-certificate.pem')
 };
 
 
