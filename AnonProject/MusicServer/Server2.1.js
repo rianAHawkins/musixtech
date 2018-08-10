@@ -64,10 +64,12 @@ app.get('/', function(req, res)
     var ismobile = mobile(req);
     if(ismobile)
     {
+      console.log("mobile");
       res.sendFile(__dirname+'/pages/mMusixTech.html');
     }
     else
     {
+      console.log("desktop");
       res.sendFile(__dirname+'/pages/MusixTech.html');
     }
 });
