@@ -310,7 +310,7 @@ apiRoutes.post('/authenticate', function(req, res)
 
       // check if password matches
       var passing = depep(user.password,user.nick);
-      var tpass = req.bpdy.password;//deUser(req.body.password);
+      var tpass = req.body.password;//deUser(req.body.password);
       //log("username: "+user.name+"\npass: "+passing+' , '+tpass+"\nlen:"+passing.length+"..."+tpass.length);
       if (passing != tpass) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
@@ -680,14 +680,32 @@ function saveFile(file,location)
 //========= MUSIC Server @mapi==========
 //======================================
 
+
+// api signUp
+
+app.post('/signUp',function(req, res)
+{
+  // User
+  var User = AppModels('User');
+  var fresh = new User ({
+      name: req.body.name,
+      password: req.body.password
+    });
+    fresh.save(function(err) {
+        if (err) throw err;
+        console.log('User saved successfully');
+      });
+});
+
 // get an instance of the router for api routes
 var music = express.Router();
+
 // apply the routes to our application with the prefix /api
 app.use('/mapi', music);
 
 music.get('/',function(req,res)
 {
-  res.sendFile(__dirname+'/pages/index.html')
+  res.json({ message: 'The API to rule them all' });
 });
 
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
@@ -709,7 +727,7 @@ music.post('/authenticate', function(req, res)
 
       // check if password matches
       var passing = depep(user.password,user.nick);
-      var tpass = req.bpdy.password;//deUser(req.body.password);
+      var tpass = req.body.password;//deUser(req.body.password);
       //log("username: "+user.name+"\npass: "+passing+' , '+tpass+"\nlen:"+passing.length+"..."+tpass.length);
       if (passing != tpass) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
@@ -846,7 +864,6 @@ music.use(function(req, res, next)
 
   }
 });
-
 
 music.post('/signUp',function(req,res)
 {
