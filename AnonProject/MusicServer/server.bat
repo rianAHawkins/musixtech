@@ -1,3 +1,4 @@
+@echo off
 echo %time%
 timeout 10> nul
 echo %time%

@@ -17,12 +17,13 @@ var util        = require('util');
 var fs          = require('fs');
 var nodemailer  = require('nodemailer');
 var mobile      = require('is-mobile');
+var child_process = require('child_process');
 
 // =======================
 // === configuration =====
 // =======================
 
-var songs = {},songsN={},
+var songs = {},songsN={},
 count = 0,sont=0;
 var httpsPort = 83;
 var port = 82; // used to create, sign, and verify tokens
@@ -236,6 +237,19 @@ app.post('/psignup', function(req,res)
         res.json({success:false, message:'Great minds think alike: usename is in use'});
       }
     });
+});
+
+app.get('/update', function(req,res){
+  res.sendFile(__dirname+'/pages/Update.html');
+});
+
+app.post('/update', function(req,res){
+  //run bat file
+  console.log("Am updating here...T");
+  child_process.exec(__dirname+'/update.bat', function(error, stdout, stderr) {
+      console.log(stdout);
+      //process.exit()
+  });
 });
 
 apps.get('/', function(req, res)
