@@ -711,7 +711,6 @@ music.get('/',function(req,res)
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
 music.post('/authenticate', function(req, res)
 {
-
   // User
   var User = AppModels('User');
   // find the user
