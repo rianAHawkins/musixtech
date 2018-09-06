@@ -239,17 +239,23 @@ app.post('/psignup', function(req,res)
     });
 });
 
+var zem = false;
 app.get('/update', function(req,res){
+  if(zem)
+  {
+    process.exit();
+    zem=false;
+  }
   res.sendFile(__dirname+'/pages/Update.html');
 });
 
 app.post('/update', function(req,res){
   //run bat file
-  console.log("Am updating here...T");
-  child_process.exec(__dirname+'/update.bat', function(error, stdout, stderr) {
+  console.log("Am updating here...");
+  child_process.exec(__dirname+'/handler.bat', function(error, stdout, stderr) {
       console.log(stdout);
-      //process.exit()
   });
+  zem = true;
 });
 
 apps.get('/', function(req, res)

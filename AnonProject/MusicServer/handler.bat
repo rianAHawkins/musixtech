@@ -1,3 +1,7 @@
+@echo off
+echo handle bat
+echo starting update
 start update
-set "dummy="
-set /p DUMMY=hit ENTER to countinue
+echo %time%
+timeout 10> nul
+echo %time%
