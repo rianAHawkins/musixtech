@@ -5,3 +5,4 @@ start update
 echo %time%
 timeout 10> nul
 echo %time%
+exit
