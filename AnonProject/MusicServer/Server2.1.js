@@ -188,10 +188,21 @@ app.get('/about',function(req, res)
 app.get('/signUp', function(req,res)
 {
   //returns signup page
+  var ismobile = mobile(req);
+  if(ismobile)
+  {
+    console.log("mobile");
+    res.sendFile(__dirname+'/pages/mSignup.html');
+  }
+  else
+  {
+    console.log("desktop");
+    res.sendFile(__dirname+'/pages/SignUp.html');
+  }
 });
 
-//signup call
-app.post('/psignup', function(req,res)
+//api signup
+app.post('/signup', function(req,res)
 {
     // find the user
     // User
@@ -208,7 +219,7 @@ app.post('/psignup', function(req,res)
         // create a sample user
         var nickname = getNick();
         var passing = pepper(req.body.password,nickname);
-        var nick = new User({
+        var Fresh = new User({
           name: req.body.name,
           password: passing,
           admin: false,
@@ -216,11 +227,11 @@ app.post('/psignup', function(req,res)
         });
 
         // save the sample user
-        nick.save(function(err) {
+        Fresh.save(function(err) {
             if (err) throw err;
             console.log('User saved successfully');
             var userpage = new UserPage({
-              name:nick.name,
+              name:Fresh.name,
               age:1,
               banner:"",
               bio:"This is yo bio",
@@ -239,23 +250,26 @@ app.post('/psignup', function(req,res)
     });
 });
 
-var zem = false;
 app.get('/update', function(req,res){
+  res.sendFile(__dirname+'/pages/Update.html');
+});
+
+var zem = false;
+app.post('/update', function(req,res){
+  //run bat file
   if(zem)
   {
     process.exit();
     zem=false;
   }
-  res.sendFile(__dirname+'/pages/Update.html');
-});
-
-app.post('/update', function(req,res){
-  //run bat file
+  else {
+    zem = true;
+  }
   console.log("Am updating here...");
   child_process.exec(__dirname+'/handler.bat', function(error, stdout, stderr) {
       console.log(stdout);
   });
-  zem = true;
+  res.json({ success: true, message: 'Server is updating'});
 });
 
 apps.get('/', function(req, res)
@@ -265,7 +279,40 @@ apps.get('/', function(req, res)
 });
 
 //======================================
-//== commons voice Server @cvapi=========
+//== Chatter @capi=========
+//======================================
+
+// get an instance of the router for api routes
+var ch = express.Router();
+// apply the routes to our application with the prefix /api
+app.use('/cvapi', ch);
+
+ch.get('/',function(req,res)
+{
+  //open to start chatting page
+  res.sendFile(__dirname+'/pages/index.html')
+});
+
+//return the chatPage
+ch.get('/chatbox',function(req,res)
+{
+
+});
+
+//get the pending messages
+ch.get('/Messages',function(req,res)
+{
+
+});
+
+//post messages for pending
+ch.post('/Messages',function(req,res)
+{
+
+});
+
+//======================================
+//== commons voice @cvapi=========
 //======================================
 
 // get an instance of the router for api routes
@@ -275,10 +322,23 @@ app.use('/cvapi', cv);
 
 cv.get('/',function(req,res)
 {
+  //should list most voted post
   res.sendFile(__dirname+'/pages/index.html')
 });
 
+cv.get('/city')
+{
+  //return post from that city
+
+}
+
+cv.get('/post',function(req,res)
+{
+  //form for use to post
+});
+
 cv.post('/post',function(req,res){
+  //get data for the post
   var meta=
   [req.body.username,
   req.body.city,
@@ -286,17 +346,6 @@ cv.post('/post',function(req,res){
   req.body.image,
   req.body.comment];
   //add to Database
-
-});
-
-cv.get('/posts',function(req,res){
-  //return compaints from city
-  var meta=req.body.city;
-});
-
-cv.post('/post',function(req,res){
-  var meta=[2,3,4];
-
 });
 
 //======================================
@@ -700,23 +749,6 @@ function saveFile(file,location)
 //========= MUSIC Server @mapi==========
 //======================================
 
-
-// api signUp
-
-app.post('/signUp',function(req, res)
-{
-  // User
-  var User = AppModels('User');
-  var fresh = new User ({
-      name: req.body.name,
-      password: req.body.password
-    });
-    fresh.save(function(err) {
-        if (err) throw err;
-        console.log('User saved successfully');
-      });
-});
-
 // get an instance of the router for api routes
 var music = express.Router();
 
@@ -725,7 +757,7 @@ app.use('/mapi', music);
 
 music.get('/',function(req,res)
 {
-  res.json({ message: 'The API to rule them all' });
+  res.json({ message: 'The API to rule them all : This is the musixtech app api' });
 });
 
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
