@@ -2,20 +2,13 @@
 echo server bat
 echo starting server
 
-echo %time%
-timeout 10> nul
-echo %time%
-
-node Server2.1.js
-
-echo exiting in 10
-echo %time%
-timeout 5> nul
-echo %time%
-echo exiting in 5
-echo %time%
-timeout 5> nul
-echo %time%
+:loop
+tasklist /FI "IMAGENAME eq Server.exe" 2>NUL | find /I /N "Server.exe">NUL
+if "%ERRORLEVEL%"=="0" (echo %time% still going)
+if "%ERRORLEVEL%" NEQ "0" (
+echo starting program
+start Server.exe
+)
+timeout 240>NUL
+goto loop
 exit
-
-
