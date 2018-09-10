@@ -257,17 +257,9 @@ app.get('/update', function(req,res){
 var zem = false;
 app.post('/update', function(req,res){
   //run bat file
-  if(zem)
-  {
-    process.exit();
-    zem=false;
-  }
-  else {
-    zem = true;
-  }
   console.log("Am updating here...");
-  res.json({ success: true, message: 'Server is updating'});
   process.exit();
+  //res.json({ success: true, message: 'Server is updating'});
 });
 
 apps.get('/', function(req, res)
@@ -307,6 +299,18 @@ ch.get('/Messages',function(req,res)
 ch.post('/Messages',function(req,res)
 {
 
+});
+
+//get pics
+ch.get('/pic',function(req,res)
+{
+  //image id to look up in the database
+  var image = res.body.imgID;
+});
+
+ch.post('/pic',function(req,res)
+{
+  //post image to profile
 });
 
 //======================================
