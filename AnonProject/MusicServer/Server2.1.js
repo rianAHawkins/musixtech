@@ -266,10 +266,8 @@ app.post('/update', function(req,res){
     zem = true;
   }
   console.log("Am updating here...");
-  child_process.exec(__dirname+'/handler.bat', function(error, stdout, stderr) {
-      console.log(stdout);
-  });
   res.json({ success: true, message: 'Server is updating'});
+  process.exit();
 });
 
 apps.get('/', function(req, res)
