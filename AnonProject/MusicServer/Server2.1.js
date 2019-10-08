@@ -92,6 +92,11 @@ app.get('/a',function(req, res)
   res.sendFile(__dirname+'/res/about.jpg');
 });
 
+app.get('/valerie',function(req, res)
+{
+  res.sendFile(__dirname+'/pages/valerie.html');
+});
+
 app.get('/game',function(req, res)
 {
   var ismobile = mobile(req);
