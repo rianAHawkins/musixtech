@@ -7,11 +7,9 @@ var apps        = express();
 var bodyParser  = require('body-parser');
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
-var multer      = require('multer');
 var jwt         = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config      = require('./config'); // get our config file
 var AppModels   = require('./models');//user'); // get our mongoose model
-var fileSystem  = require('fs');
 var path        = require('path');
 var util        = require('util');
 var fs          = require('fs');
@@ -949,7 +947,7 @@ music.get('/song',function(req,res)
     GetSongByIndex(song,function(x)
     {
         filePath= __dirname+'/Songs/'+x;
-        var stat = fileSystem.statSync(filePath);
+        var stat = fs.statSync(filePath);
         res.writeHead(200,
         {
         'Content-Type': 'audio/mpeg',
@@ -957,7 +955,7 @@ music.get('/song',function(req,res)
         'Accept-Ranges':'bytes',
         'Content-Range':0-stat.size/stat.size
         });
-        var readStream = fileSystem.createReadStream(filePath);
+        var readStream = fs.createReadStream(filePath);
         // We replaced all the event handlers with a simple call to util.pump()
         readStream.pipe(res);
     },'mp3');
