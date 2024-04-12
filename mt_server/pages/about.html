@@ -1,0 +1,150 @@
+<html>
+<head style="background-color:white;">
+  <title>musixtech</title>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<style>
+
+  #bar
+  {
+    background: black;
+  }
+
+  #body
+  {
+    background: linear-gradient(to top right, #000000 0%, #99ccff 100%);
+    align-content: center;
+    padding:  0px;
+    margin: 0px;
+    min-height:100%;
+    position:relative;
+    justify-content: center;
+  }
+
+  #head
+  {
+    margin-top: 10px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    color: black;
+    font-family: Garamond;
+  }
+
+  #divs
+  {
+    text-align: center;
+    background-color: #ebe8df;
+    width:500px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .con
+  {
+    width: 400px;
+    height: 30px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  .det
+  {
+    width: 400px;
+    height: 100px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  .Shead
+  {
+    color: white;
+    font-family: Garamond;
+    font-weight: bold;
+  }
+
+  #back:hover
+  {
+    color: #99ccff;
+    cursor:pointer;
+  }
+
+  input[type=text]:focus
+  {
+      border: 3px solid #555;
+  }
+
+  .button
+  {
+      background-color: #5588ff; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 60px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor:pointer;
+  }
+
+  #gcap
+  {
+    font-family: Garamond;
+    font-size: 20px;
+  }
+</style>
+
+<body id="body">
+
+  <div id='bar'>
+  <p id='back' class='Shead' onclick="myFunction()">Back</p>
+  </div>
+  <div id='divs'>
+    <p id="head">About</p>
+    <p id='gcap'>
+    We are a small team of devs looking to do great things.</br>
+    Our team has diverse people with a lot of experince </br>
+    with web, mobile apps, and game development.</br>
+    We created this bussiness to help people with their dreams.</br>
+    Feel to email us at musixtechapi@gmail.com
+    </p>
+    <input onclick="myFunction()" class='button' value="Home">
+  </div>
+
+  <script>
+
+  function myFunction()
+  {
+    var loc=window.location.href;
+    var i =loc.indexOf('about');
+    loc=loc.substring(0,i);
+    redirect(loc);
+  }
+
+  function redirect (url)
+  {
+      var ua        = navigator.userAgent.toLowerCase(),
+          isIE      = ua.indexOf('msie') !== -1,
+          version   = parseInt(ua.substr(4, 2), 10);
+
+      // Internet Explorer 8 and lower
+      if (isIE && version < 9) {
+          var link = document.createElement('a');
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+      }
+
+      // All other browsers can use the standard window.location.href (they don't lose HTTP_REFERER like Internet Explorer 8 & lower does)
+      else {
+          window.location.href = url;
+      }
+  }
+  </script>
+
+</body>
+</html>
