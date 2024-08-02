@@ -5,6 +5,9 @@
   text-align: center;
 }
 
+div.ex1 {display: inline-flex;}
+p.ex1 {display: inline-flex;}
+
 .logo {
   height: 6em;
   padding: 1.5em;

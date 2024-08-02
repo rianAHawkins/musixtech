@@ -9,7 +9,6 @@ module.exports = mongoose.model('User', new Schema({
     gmail:String,
     pp:String,
     admin: Boolean,
-    nick:String,
     friends:Array,
     token:String,
     noti:Array

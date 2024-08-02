@@ -16,6 +16,7 @@ var fs          = require('fs');
 var nodemailer  = require('nodemailer');
 var mobile      = require('is-mobile');
 var child_process = require('child_process');
+var {encrypt,decrypt} = require('./EOD');
 
 // =======================
 // === configuration =====
@@ -23,9 +24,8 @@ var child_process = require('child_process');
 
 var songs = {},songsN={},
 count = 0,sont=0;
-var httpsPort = 83;
+var httpsPort = 8080;
 var port = 82; // used to create, sign, and verify tokens
-mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
 apps.set('superSecret', config.secret); // secret variable
 
@@ -41,11 +41,12 @@ apps.use(morgan('dev'));
 
 const https = require('https');
 
-var MongoClient = require('mongodb').MongoClient
-, format = require('util').format;
+var MongoClient;// require('mongodb').MongoClient
+var format = require('util').format;
 var assert = require('assert');
+const { STATUS_CODES } = require('http');
 var ObjectId = require('mongodb').ObjectID;
-var Uurl = 'mongodb://127.0.0.1:27017/users';
+var Uurl = 'mongodb://127.0.0.1:27019/users';
 
 
 const options = {
@@ -57,20 +58,31 @@ const options = {
 // =======================
 // ===== routes ==========
 // =======================
+
+
+app.use(function(req, res, next) {
+  //Access-Control-Allow-Origin: *
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
 // basic route
 app.get('/', function(req, res)
 {
-    var ismobile = mobile(req);
-    if(ismobile)
-    {
-      console.log("mobile");
-      res.sendFile(__dirname+'/pages/mMusixTech.html');
-    }
-    else
-    {
-      console.log("desktop");
-      res.sendFile(__dirname+'/pages/MusixTech.html');
-    }
+    res.send("YEAH IM AN API");
+    // var ismobile = mobile(req);
+    // if(ismobile)
+    // {
+    //   console.log("mobile");
+    //   res.sendFile(__dirname+'/pages/mMusixTech.html');
+    // }
+    // else
+    // {
+    //   console.log("desktop");
+    //   res.sendFile(__dirname+'/pages/MusixTech.html');
+    // }
 });
 
 app.get('/g',function(req, res)
@@ -220,13 +232,11 @@ app.post('/signup', function(req,res)
       if (!user) {
         //then get password and add to database
         // create a sample user
-        var nickname = getNick();
-        var passing = pepper(req.body.password,nickname);
+        var passing = encrypt(req.body.password);
         var Fresh = new User({
           name: req.body.name,
           password: passing,
-          admin: false,
-          nick:nickname
+          admin: false
         });
 
         // save the sample user
@@ -265,490 +275,11 @@ app.post('/update', function(req,res){
   //res.json({ success: true, message: 'Server is updating'});
 });
 
-apps.get('/', function(req, res)
+app.get('/HB', function(req, res)
 {
-    res.sendFile("Welcome to the api");
+    res.status(200).json({msg:"Welcome to the api"});
     //res.send('Hello! The API is at https://localhost:' + httpsPort + '/api');
 });
-
-//======================================
-//== Chatter @capi=========
-//======================================
-
-// get an instance of the router for api routes
-var ch = express.Router();
-// apply the routes to our application with the prefix /api
-app.use('/cvapi', ch);
-
-ch.get('/',function(req,res)
-{
-  //open to start chatting page
-  res.sendFile(__dirname+'/pages/index.html')
-});
-
-//return the chatPage
-ch.get('/chatbox',function(req,res)
-{
-
-});
-
-//get the pending messages
-ch.get('/Messages',function(req,res)
-{
-
-});
-
-//post messages for pending
-ch.post('/Messages',function(req,res)
-{
-
-});
-
-//get pics
-ch.get('/pic',function(req,res)
-{
-  //image id to look up in the database
-  var image = res.body.imgID;
-});
-
-ch.post('/pic',function(req,res)
-{
-  //post image to profile
-});
-
-//======================================
-//== commons voice @cvapi=========
-//======================================
-
-// get an instance of the router for api routes
-var cv = express.Router();
-// apply the routes to our application with the prefix /api
-app.use('/cvapi', cv);
-
-cv.get('/',function(req,res)
-{
-  //should list most voted post
-  res.sendFile(__dirname+'/pages/index.html')
-});
-
-cv.get('/city')
-{
-  //return post from that city
-
-}
-
-cv.get('/post',function(req,res)
-{
-  //form for use to post
-});
-
-cv.post('/post',function(req,res){
-  //get data for the post
-  var meta=
-  [req.body.username,
-  req.body.city,
-  req.body.address,
-  req.body.image,
-  req.body.comment];
-  //add to Database
-});
-
-//======================================
-
-//======================================
-//== Social Network Server @api=========
-//======================================
-
-// get an instance of the router for api routes
-var apiRoutes = express.Router();
-
-// apply the routes to our application with the prefix /api
-app.use('/api', apiRoutes);
-
-// route to authenticate a user (POST http://localhost:8080/api/authenticate)
-apiRoutes.post('/authenticate', function(req, res)
-{
-
-  // User
-  var User = AppModels('User');
-  // find the user
-  User.findOne({
-    name: req.body.name
-  }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-
-      // check if password matches
-      var passing = depep(user.password,user.nick);
-      var tpass = req.body.password;//deUser(req.body.password);
-      //log("username: "+user.name+"\npass: "+passing+' , '+tpass+"\nlen:"+passing.length+"..."+tpass.length);
-      if (passing != tpass) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
-
-        // if user is found and password is right
-        // create a token with only our given payload
-    // we don't want to pass in the entire user since that has the password
-    const payload = {
-      admin: user.admin
-    };
-        var token = jwt.sign(payload, app.get('superSecret'), {
-          expiresIn:900
-          //expiresInMinutes: 1440 // expires in 24 hours
-        });
-
-        //update token of user
-        user.token=token;
-        user.save(function(err) {
-            if (err) throw err;
-            console.log('User saved successfully');
-          });
-
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token: token,
-          nuser:user.name,
-          friends:user.friends,
-          noti:user.noti
-        });
-      }
-    }
-  });
-});
-
-// route middleware to verify a token
-apiRoutes.use(function(req, res, next)
-{
-
-  // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-  // decode token
-  if (token) {
-
-    // verifies secret and checks exp
-    jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-      if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;
-        next();
-      }
-    });
-
-  } else {
-
-    // if there is no token
-    // return an error
-    return res.status(403).send({
-        success: false,
-        message: 'No token provided.'
-    });
-
-  }
-});
-
-// route to show a random message (GET http://localhost:8080/api/)
-apiRoutes.get('/', function(req, res)
-{
-  res.json({ message: 'The API to rule them all' });
-});
-
-//return the delete page for website
-apiRoutes.get('/delete', function(req,res){
-
-});
-
-// route to delete the user
-apiRoutes.post('/pdelete', function(req, res)
-{
-  // User
-  var User = AppModels('User');
-  // find the user
-  User.findOne({
-    name: req.body.name
-  }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-      // check if password matches
-      var passing = depep(user.password,user.nick);
-      var puser = req.bpdy.password;//deUser(req.body.password);
-      if (passing != puser) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
-        // if user is found and password is right
-        // see if token is right
-        var token =req.body.token || req.query.token || req.headers['x-access-token'];
-        if(user.token == token)
-        {
-          User.remove(
-          {
-            name: req.body.name,
-            password: user.password
-          },
-          function(err)
-          {
-            if (err)throw err;
-            res.json({ success: true });
-          })
-        }
-      }
-    }
-  });
-});
-
-//route to return all users (GET http://localhost:8080/api/users)
-apiRoutes.get('/users', function(req,res)
-{
-  // User
-  var User = AppModels('User');
-  User.find({}, function(err, users) {
-    res.json({name:users.name,admin:user.admin});
-  });
-});
-
-//request to add friend
-apiRoutes.post('/requestFriend',function(req,res){
-
-});
-
-//confirm the friend
-apiRoutes.post('/confirmFriend',function(req,res){
-
-});
-
-//remove friend
-apiRoutes.post('/removeFriend',function(req,res){
-
-});
-
-//used to edit the notification array
-apiRoutes.post('/updatenoti',function (req,res){
-
-});
-
-//load the post
-apiRoutes.get('/gpost',function(req,res){
-
-  var User = AppModels('User');
-  // find the user
-  User.findOne({
-    name: req.body.name
-  }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user)
-    {
-
-      var post = AppModels('Post');
-      //db.collection('Songs').find({ Songid: { $gt: song } }).sort({Songid:1})
-
-      var postings={},lpost=req.friends;
-      for(var x=0;x<lpost.friends.length;x++){
-        /*
-        //should be saying get post of friends
-        //Where dates is older than current time
-        //and or last seen post from that user
-        */
-        postings[x]=post.find({name:lpost.friends[x],date:{lte:lpost.dates[x]}})
-        .sort({date:-1}).limit(10);
-      }
-      log(postings);
-      res.send(postings);
-    }
-  });
-});
-
-//make a post
-apiRoutes.post('/ppost',function(req,res){
-  var post = AppModels('Post');
-
-});
-
-//route to update UserPage
-apiRoutes.get('/userpage', function(req,res)
-{
-  // User
-  var UserPage = AppModels('UserPage');
-  UserPage.findOne(
-    {
-      name: req.body.name
-    },
-  function(err, user)
-  {
-    if (err) throw err;
-
-    if (!user)
-    {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    }
-    else if (user)
-    {
-      //send all the userpage info
-      res.json(user);
-    }
-  });
-});
-
-//route to edit the user page
-apiRoutes.post('/euserpage', function(req,res)
-{
-  var UserPage = AppModels('UserPage');
-  UserPage.findOne({
-    name: req.body.name
-  },
-  function(err, user)
-  {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    }
-    else if (user)
-    {
-      user.age=req.body.age;
-      user.bio=req.body.bio;
-      // Uploaded files:
-      var banner =req.files.banner||null;
-      var bioI =req.files.bio||null;
-
-
-      if (banner!=null)
-      {
-        //send all the userpage info
-        var bloc ="./"+user.name+"/images/banner.jpg";
-        saveFile(banner,bloc);
-        user.banner = bloc;
-        log("banner updated");
-      }
-      if(bioI!=null)
-      {
-        user.pin=user.pin+1;
-        var loc = "./"+user.name+"/images/bio/pic"+user.pin+".jpg";
-        user.image = loc;
-        saveFile(bioI,loc);
-        log("Bio image updated")
-      }
-      User.save(function(err) {
-        if (err) throw err;
-        console.log('User page saved successfully');
-        res.json({ success: true, message: 'user page update was successfull'});
-    });
-
-      res.json({success:true,message:"update was good fammy"});
-    }
-  });
-});
-
-//Test update
-apiRoutes.get('/password', function(req,res)
-{
-  var User = AppModels('User');
-  User.find({}, function(err, users) {
-    user.password = req.body.passing;
-    res.json(users);
-  });
-});
-
-//decode
-function depep(str1,str2)
-{
-  var save="";
-  var c1=0,c2=0;x=0;
-  while(x<30)
-  {
-      var num = (str1.charCodeAt(c1)-x);
-      if(!(num== str2.charCodeAt(c2))){
-        num +=str2.charCodeAt(c2);
-        save+=String.fromCharCode(num);
-      }
-      //console.log("num:"+num+" test:"+test);
-      if(c2>=str2.length){c2=0}
-      else{c2+=1;}
-      c1+=1;
-
-      x+=1;
-  }
-  save = save.substr(0,passing.length-1);
-  return save;
-}
-
-function deUser(str1)
-{
-  var save="",x=0,p=3;
-  while(x<str1.length)
-  {
-    var num =str1.charCodeAt(x)-p;
-    save+= String.fromCharCode(num);
-    x+=1;p+=3;
-  }
-}
-
-function getNick()
-{
-  var save='';
-  for(var x=0;x<20;x++){
-    var num =getRandomArbitrary(97, 122);
-    save+=String.fromCharCode(num)
-  }
-  return save;
-}
-
-//nickGen
-function getRandomArbitrary(min, max)
-{
-  return Math.random() * (max - min) + min;
-}
-
-//encode
-function pepper(str1,str2)
-{
-  var save="";
-  var c1=0,c2=0,x=0;
-  while(x<30)
-  {
-    var num;
-    if(c1<str1.length){
-      num = (str1.charCodeAt(c1)-str2.charCodeAt(c2))+save.length;
-    }else{
-      num = str2.charCodeAt(c2)+save.length;
-    }
-      save+=String.fromCharCode(num);
-      if(c2>=str2.length){c2=0}
-      else{c2+=1;}
-      c1+=1;
-      x+=1;
-  }
-  return save;
-}
-
-// File Storage
-function saveFile(file,location)
-{
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let sampleFile = req.files.banner;
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('/somewhere/on/your/server/filename.jpg', function(err) {
-    if (err)
-      return res.status(500).send(err);
-  });
-}
-//======================================
 
 //======================================
 //========= MUSIC Server @mapi==========
@@ -782,7 +313,7 @@ music.post('/authenticate', function(req, res)
     } else if (user) {
 
       // check if password matches
-      var passing = depep(user.password,user.nick);
+      var passing = decrypt(user.password);
       var tpass = req.body.password;//deUser(req.body.password);
       //log("username: "+user.name+"\npass: "+passing+' , '+tpass+"\nlen:"+passing.length+"..."+tpass.length);
       if (passing != tpass) {
@@ -1001,7 +532,7 @@ var findUsers = function(db, callback,name,password)
 
 function GetList(song,cb)
 {
-  MongoClient.connect('mongodb://127.0.0.1:27017/users', function(err, db)
+  MongoClient.connect('mongodb://127.0.0.1:27018/users', function(err, db)
   {
     //db.collection('Songs').remove({Songid:3},{justOne:true})
     var cursor =db.collection('Songs').find({ Songid: { $gt: song } }).sort({Songid:1})
@@ -1071,6 +602,11 @@ function GetSongByIndex(x,ret,from)
     });
 }
 
+function makeConnection(){
+  MongoClient = require('mongodb').MongoClient;
+  mongoose.connect(config.database); // connect to database
+}
+
 //index of function
 function indOf(x,y)
 {
@@ -1111,11 +647,11 @@ var SaveUsers = function(db, callback,name,password,age)
 //server start up
 function start()
 {
-  app.listen(port);
-  log('HTTP port Started on http://localhost:' + port);
+  app.listen(httpsPort);
+  log('HTTP port Started on http://localhost:' + httpsPort);
 
-  https.createServer(options, apps).listen(httpsPort);
-  log("HTTPs port Started on https://localhost:"+httpsPort);
+  //https.createServer(options, apps).listen(httpsPort);
+  //log("HTTPs port Started on https://localhost:"+httpsPort);
 }
 
 //console log replacment
