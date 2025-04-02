@@ -1,4 +1,4 @@
 module.exports = {
     'secret': 'ilovescotchyscotch',
-    'database': 'mongodb://127.0.0.1:27016/users'
+    'database': 'mongodb://myUserAdmin:Whiteandrewrian15@localhost:24242/local?authSource=admin'
 };

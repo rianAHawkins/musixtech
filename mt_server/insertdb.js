@@ -36,9 +36,11 @@ MongoClient.connect('mongodb://127.0.0.1:27017/users', function(err, db)
 }
 
 function showdb(){
-  MongoClient.connect('mongodb://127.0.0.1:27017/users', function(err, db){
+  console.log("Start");
+  MongoClient.connect('mongodb://myUserAdmin:Whiteandrewrian15@localhost:24242/local?authSource=admin', function(err, db){
+    console.log("connected");
     //db.collection('Songs').remove({Author:'Jcole'},{justOne:true})
-    var cursor =db.collection('Songs').find().sort({Songid:1})
+    var cursor =db.collection('Songs').find({id:1});//.sort({id:1})
     var stop=0;
     cursor.each(function(err, doc) {
        assert.equal(err, null);
@@ -46,12 +48,16 @@ function showdb(){
           console.log(doc);
           stop++;
        } else {
+        console.log("nothing found");
 
        }
 
   });
+  
 
-});}
+});
+console.log("done");
+}
 
 if(insert){
   inserts();
