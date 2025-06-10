@@ -1,7 +1,7 @@
 var aes256 = require('aes256');
 
 var key = 'FireFlyPleaseDontLie26';
-var plaintext = '';//FreeMyNiggaDon
+var plaintext = '';//FreeMyDon
 // var buffer = Buffer.from(plaintext);
 
 var cipher = aes256.createCipher(key);
